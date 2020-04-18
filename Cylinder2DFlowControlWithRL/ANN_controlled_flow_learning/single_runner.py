@@ -1,3 +1,5 @@
+"""Allows you to test a model by evaluating a model using no randomness (deterministic mode)"""
+
 from printind.printind_function import printi, printiv
 from env import resume_env
 

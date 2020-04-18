@@ -1,3 +1,6 @@
+# Solves FE problem (sets BCs,
+# There are three variational problems to be defined, one for each step in the IPCS scheme
+
 from jet_bcs import JetBCValue
 from dolfin import *
 import numpy as np
@@ -31,7 +34,7 @@ class FlowSolver(object):
         # Tags 5 and higher are jets
 
         # Define function spaces
-        V = VectorFunctionSpace(mesh, 'CG', 2)
+        V = VectorFunctionSpace(mesh, 'CG', 2) # Here, "CG" stands for Continuous Galerkin, implying the standard Lagrange family of elements.
         Q = FunctionSpace(mesh, 'CG', 1)
 
         # Define trial and test functions
@@ -55,11 +58,14 @@ class FlowSolver(object):
         n  = FacetNormal(mesh)
         f  = Constant((0, 0))
 
-        epsilon = lambda u :sym(nabla_grad(u))
+        # Define strain-rate tensor
+        epsilon = lambda u :sym(nabla_grad(u))    # Why not def epsilon(u):   return sym(nabla_grad(u))
 
+        # Define stress tensor
         sigma = lambda u, p: 2*mu*epsilon(u) - p*Identity(2)
 
         # Define variational problem for step 1
+
         F1 = (rho*dot((u - u_n) / dt, v)*dx
               + rho*dot(dot(u_n, nabla_grad(u_n)), v)*dx
               + inner(sigma(U, p_n), epsilon(v))*dx
@@ -78,7 +84,7 @@ class FlowSolver(object):
 
         inflow_profile = flow_params['inflow_profile'](mesh, degree=2)
         # Define boundary conditions, first those that are constant in time
-        bcu_inlet = DirichletBC(V, inflow_profile, surfaces, inlet_tag)
+        bcu_inlet = DirichletBC(V, inflow_profile, surfaces, inlet_tag)  # (Function space, value, subdomain, method to identify DOFs)
         # No slip
         bcu_wall = DirichletBC(V, Constant((0, 0)), surfaces, wall_tag)
         bcu_cyl_wall = DirichletBC(V, Constant((0, 0)), surfaces, cylinder_noslip_tag)
@@ -140,7 +146,7 @@ class FlowSolver(object):
 
         gtime = 0.  # External clock
 
-        # Things to remeber for evolution
+        # Things to remember for evolution
         self.jets = jets
         # Keep track of time so that we can query it outside
         self.gtime, self.dt = gtime, dt

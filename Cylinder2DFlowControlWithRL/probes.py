@@ -343,7 +343,9 @@ if __name__ == '__main__':
     # #########################
     # # Check scalar
     # #########################
-    V = FunctionSpace(mesh, 'CG', 2)
+    V = FunctionSpace(mesh, 'CG', 2)  # Here, "CG" stands for Continuous Galerkin, implying the standard Lagrange family of elements.
+                                      # 2 stands for quadratic --> Quadratic triangular elements
+    # The computed solution u will be continuous across elements and linearly varying in x and y inside each element.
     f = Expression('t*(x[0]+x[1])', t=0, degree=1)
     # NOTE: f(x) has issues in parallel so we don't do f eval
     # through fenics
