@@ -52,16 +52,7 @@ def resume_env(plot=False,
                     'template': '../geometry_2d.template_geo',
                     'remesh': remesh}
 
-    def profile(mesh, degree):
-        bot = mesh.coordinates().min(axis=0)[1]
-        top = mesh.coordinates().max(axis=0)[1]
-        print bot, top
-        H = top - bot
-
-        Um = 1.5
-
-        return Expression(('-4*Um*(x[1]-bot)*(x[1]-top)/H/H',
-                        '0'), bot=bot, top=top, H=H, Um=Um, degree=degree)
+    profile = Expression('1', '0', degree=2)
 
     flow_params = {'mu': 1E-3,
                   'rho': 1,

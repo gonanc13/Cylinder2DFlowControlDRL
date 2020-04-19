@@ -19,7 +19,7 @@ from Env2DCylinder import Env2DCylinder
 
 printi("resume env")
 
-environment = resume_env(dump=10, single_run=True)
+environment = resume_env(plot=500, dump=10, single_run=True)
 deterministic=True
 
 printi("define network specs")
@@ -94,6 +94,7 @@ restore_path = None
 if(os.path.exists("saved_models/checkpoint")):
     restore_path = './saved_models'
 
+
 if restore_path is not None:
     printi("restore the model")
     agent.restore_model(restore_path)
@@ -111,11 +112,11 @@ def one_run():
     printi("start simulation")
     state = environment.reset()
     environment.render = True
-
+    null_action = np.zeros(environment.actions['shape'])
     for k in range(env.nb_actuations):
         #environment.print_state()
         action = agent.act(state, deterministic=deterministic)
-        state, terminal, reward = environment.execute(action)
+        state, terminal, reward = environment.execute(null_action)
     # just for test, too few timesteps
     # runner.run(episodes=10000, max_episode_timesteps=20, episode_finished=episode_finished)
 

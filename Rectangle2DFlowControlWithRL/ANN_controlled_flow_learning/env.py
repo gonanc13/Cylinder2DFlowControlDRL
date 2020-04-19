@@ -66,20 +66,8 @@ def resume_env(plot=False, # To plot results (Field, controls, lift, drag, rec a
                     'mesh_size_coarse': 0.1,  # Mesh Size Close to Outflow  (***)
                     'coarse_distance': 1.0}  # Distance From Cylinder's Right-Most Point Where Coarsening Starts  (***)
 
-    def profile(mesh, degree): # define inflow profile
-        '''
-           Time independent inflow profile.
-        '''
-        bot = mesh.coordinates().min(axis=0)[1] # get bottom boundary of profile
-        top = mesh.coordinates().max(axis=0)[1] # get top boundary of profile
-        print bot, top
-        H = top - bot  # Domain height
 
-        Um = 1.5 # ???
-
-        return Expression(('-4*Um*(x[1]-bot)*(x[1]-top)/H/H',
-                        '0'), bot=bot, top=top, H=H, Um=Um, degree=degree) # TODO: degree??
-        # x[1] is equivalent to y
+    profile = Expression('1','0', degree=2)
 
     flow_params = {'mu': 1E-3, # Dynamic viscosity. This in turn defines the Reynolds number: Re = U * D / mu  (***)
                   'rho': 1,  # Density

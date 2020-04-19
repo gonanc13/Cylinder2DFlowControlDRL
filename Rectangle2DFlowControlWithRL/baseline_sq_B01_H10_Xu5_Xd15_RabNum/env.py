@@ -58,29 +58,13 @@ def resume_env(plot=False, # To plot results (Field, controls, lift, drag, rec a
                     'height_cylinder': 0.1,  # Cylinder Height (***)
                     'ar': 1.0,  # Cylinder Aspect Ratio
                     'cylinder_y_shift': 0,  # Cylinder Center Shift from Centerline, Positive UP  (***)
-                    'x_upstream': 1.0,  # Domain Upstream Length (from left-most rect point)  (***)
-                    'x_downstream': 2.6,  # Domain Downstream Length (from right-most rect point)  (***)
-                    'height_domain': 2.0,  # Domain Height  (***)  Souhankar showed that the boundaries are sufficiently far away ifH >= 20B, (little effect on flow near cylinder.
+                    'x_upstream': 0.5,  # Domain Upstream Length (from left-most rect point)  (***)
+                    'x_downstream': 1.5,  # Domain Downstream Length (from right-most rect point)  (***)
+                    'height_domain': 1.0,  # Domain Height  (***)  Souhankar showed that the boundaries are sufficiently far away ifH >= 20B, (little effect on flow near cylinder.
                     'mesh_size_cylinder': 0.01,  # Mesh Size on Cylinder Walls  (***) 0.004 maybe
                     'mesh_size_wall': 0.05,  # Mesh Size on Channel Walls  (***)
                     'mesh_size_coarse': 0.1,  # Mesh Size Close to Outflow  (***)
-                    'coarse_distance': 1.0}  # Distance From Cylinder's Right-Most Point Where Coarsening Starts  (***)
-
-    geometry_params = {'output': '.'.join([root, 'geo']),  # output path: mesh/turek_2d.geo
-                       'length': 2.2,  # domain length (m)
-                       'front_distance': 0.05 + 0.15,  # dist from cyl center to inlet (m)
-                       'bottom_distance': 0.05 + 0.15,  # dist from cyl center to bottom wall (m)
-                       'jet_radius': 0.05,  # cylinder radius (m)
-                       'width': 0.41,  # domain width (m)
-                       'cylinder_size': 0.01,  # mesh size close to cyl wall (m)
-                       'coarse_size': 0.1,  # mesh size close to outflow (m)
-                       'coarse_distance': 0.5,  # disrance from cyl (center?) where coarsening starts (m)
-                       'box_size': 0.05,  # mesh size on wall (m)
-                       'jet_positions': [90 + jet_angle, 270 - jet_angle],  # position of jets in deg from jet_angle ref
-                       'jet_width': 10,  # jet width from center of cyl (deg)
-                       'clscale': 0.25,  # ????
-                       'template': '../geometry_2d.template_geo',  # sets rel path of geom template
-                       'remesh': remesh}  # remesh toggle (from args)
+                    'coarse_distance': 0.5}  # Distance From Cylinder's Right-Most Point Where Coarsening Starts  (***)
 
 
     profile = Expression('1','0', degree=2)

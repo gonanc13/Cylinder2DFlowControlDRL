@@ -81,11 +81,12 @@ class FlowSolver(object):
         a3 = dot(u, v)*dx
         L3 = dot(u_, v)*dx - dt*dot(nabla_grad(p_ - p_n), v)*dx
 
-        inflow_profile = flow_params['inflow_profile'](mesh, degree=2)
+        inflow_profile = flow_params['inflow_profile']
         # Define boundary conditions, first those that are constant in time
         bcu_inlet = DirichletBC(V, inflow_profile, surfaces, inlet_tag)  # (Function space, value, subdomain, method to identify DOFs)
+        # Free stream. Note: use V.sub(0) or V.sub(1) to acces individual components
+        bcu_wall = DirichletBC(V, Constant((1, 0)), surfaces, wall_tag)
         # No slip
-        bcu_wall = DirichletBC(V, Constant((0, 0)), surfaces, wall_tag)
         bcu_cyl_wall = DirichletBC(V, Constant((0, 0)), surfaces, cylinder_noslip_tag)
         # Fixing outflow pressure
         bcp_outflow = DirichletBC(Q, Constant(0), surfaces, outlet_tag)
@@ -99,9 +100,9 @@ class FlowSolver(object):
         bcu_jet = []
         jet_tags = range(cylinder_noslip_tag+1, cylinder_noslip_tag+1+2)  # 5 and 5 for 2 jets
 
-        jets = [Expression(('(-4/(width*width))*Q*(x[0]-length_cyl/2)*(x-length_cyl/2+width)','0'),  # top jet
+        jets = [Expression(('(-4/(width*width))*Q*(x[0]-length_cyl/2)*(x[0]-length_cyl/2+width)','0'),  # top jet
                            width=width, length_cyl=length_cyl, Q=0, degree=1),
-                Expression(('(4/(width*width))*Q*(x[0]-length_cyl/2)*(x-length_cyl/2+width)', '0'),  # bot jet
+                Expression(('(4/(width*width))*Q*(x[0]-length_cyl/2)*(x[0]-length_cyl/2+width)', '0'),  # bot jet
                            width=width, length_cyl=length_cyl, Q=0, degree=1)]
         # If this doesnt work, maybe it has to do with how dolfin define the origin for Expressions
         # Maybe try x[1] <= 0 ? - : +
