@@ -96,7 +96,7 @@ def resume_env(plot=False, # To plot results (Field, controls, lift, drag, rec a
 
     # The 9 'columns' of 7 probes downstream of the cylinder
     positions_probes_x_dist_from_right = [0.025, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4]
-    positions_probes_for_grid_x = [x + half_cyl_length/2 for x in positions_probes_x_dist_from_right]
+    positions_probes_for_grid_x = [x + cyl_length/2 for x in positions_probes_x_dist_from_right]
     positions_probes_for_grid_y = [-0.15, -0.1, -0.05, 0.0, 0.05, 0.1, 0.15]
 
     for crrt_x in positions_probes_for_grid_x:

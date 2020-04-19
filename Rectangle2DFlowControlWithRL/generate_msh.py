@@ -14,6 +14,26 @@ def generate_mesh(args, template='rectangle_2d.template_geo', dim=2):
     output = args.pop('output')  # -> output = 'mesh/turek_2d.geo'
     printiv(output)
 
+    with open(template, 'r') as f: old = f.readlines()  # Read template and save each line as an item of the list 'old''
+
+    split = map(lambda s: s.startswith('DefineConstant'), old).index(True) # --> Return line number of DefineConstant
+
+    body = old[split:]) # generate new .geo body with input jet pos
+
+    output = args.pop('output')  # -> output = 'mesh/turek_2d.geo'
+    printiv(output)
+
+    # os.path.splitext() splits the path name into a pair root and ext
+    if not output:
+        output = template
+    assert os.path.splitext(output)[1] == '.geo'  # return error if output doesnt have .geo extension
+
+    with open(output, 'w') as f: f.write(body)  # write new body to target ('output') .geo file
+
+    args['jet_width'] = deg2rad(args['jet_width'])  # Convert jet width to rad
+
+    scale = args.pop('clscale')  # Mesh size scaling ratio
+
     # os.path.splitext() splits the path name into a pair root and ext
     if not output:
         output = template

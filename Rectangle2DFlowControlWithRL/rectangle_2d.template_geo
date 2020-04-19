@@ -1,18 +1,19 @@
 // Define parameters. All Non-Dimensional (ND). These can then be quickly modified within the code.
 DefineConstant[
 jets_toggle = {1, Name "Toggle Jets --> 0 : No jets, 1: Yes jets"}
-height_cylinder = {1, Name "Cylinder Height (ND)"}
-ar = {1, Name "Cylinder Aspect Ratio"}
-cylinder_y_shift = {0, Name "Cylinder Center Shift from Centerline, Positive UP (ND)"}
-x_upstream = {10, Name "Domain Upstream Length (from left-most rect point) (ND)"}
-x_downstream = {30, Name "Domain Downstream Length (from right-most rect point) (ND)"}
-height_domain = {20, Name "Domain Height (ND)"}
+height_cylinder = {0.1, Name "Cylinder Height (ND)"}
+ar = {1.0, Name "Cylinder Aspect Ratio"}
+cylinder_y_shift = {0.0, Name "Cylinder Center Shift from Centerline, Positive UP (ND)"}
+x_upstream = {1.0, Name "Domain Upstream Length (from left-most rect point) (ND)"}
+x_downstream = {2.6, Name "Domain Downstream Length (from right-most rect point) (ND)"}
+height_domain = {2.0, Name "Domain Height (ND)"}
 mesh_size_cylinder = {0.01, Name "Mesh Size on Cylinder Walls"}
 mesh_size_wall = {0.05, Name "Mesh Size on Channel Walls"}
 mesh_size_coarse = {0.1, Name "Mesh Size Close to Outflow"}
-coarse_distance = {5, Name "Distance From Cylinder's Right-Most Point Where Coarsening Starts (ND)"}
-jet_width = {0.1, Name "Jet Width (ND)"}
+coarse_distance = {1.0, Name "Distance From Cylinder's Right-Most Point Where Coarsening Starts (ND)"}
+jet_width = {0.01, Name "Jet Width (ND)"}
 ];
+
 
 // Seed the cylinder's center's identifier and create the center point
 center = newp;

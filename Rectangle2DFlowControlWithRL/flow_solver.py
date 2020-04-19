@@ -104,7 +104,7 @@ class FlowSolver(object):
                 Expression(('(4/(width*width))*Q*(x[0]-length_cyl/2)*(x-length_cyl/2+width)', '0'),  # bot jet
                            width=width, length_cyl=length_cyl, Q=0, degree=1)]
         # If this doesnt work, maybe it has to do with how dolfin define the origin for Expressions
-        # Maybe try ’x[1] <= 0 ? - : +’
+        # Maybe try x[1] <= 0 ? - : +
 
         for tag, jet in zip(jet_tags, jets):
             bc = DirichletBC(V, jet, surfaces, tag)

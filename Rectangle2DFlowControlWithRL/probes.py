@@ -277,7 +277,7 @@ class RecirculationAreaProbe(object):
         # The idea is that degrees of freedom of P spaces are point evaluations
         # at corresponding spatial points. So we look at degrees of freedom
         # that are evaluations of x component
-	    V = u.function_space()
+        V = u.function_space()
         dm = V.sub(0).dofmap()
         self.indices0 = dm.dofs()
 
