@@ -66,24 +66,8 @@ def resume_env(plot=False, # To plot results (Field, controls, lift, drag, rec a
                     'mesh_size_coarse': 0.1,  # Mesh Size Close to Outflow  (***)
                     'coarse_distance': 1.0}  # Distance From Cylinder's Right-Most Point Where Coarsening Starts  (***)
 
-    geometry_params = {'output': '.'.join([root, 'geo']),  # output path: mesh/turek_2d.geo
-                       'length': 2.2,  # domain length (m)
-                       'front_distance': 0.05 + 0.15,  # dist from cyl center to inlet (m)
-                       'bottom_distance': 0.05 + 0.15,  # dist from cyl center to bottom wall (m)
-                       'jet_radius': 0.05,  # cylinder radius (m)
-                       'width': 0.41,  # domain width (m)
-                       'cylinder_size': 0.01,  # mesh size close to cyl wall (m)
-                       'coarse_size': 0.1,  # mesh size close to outflow (m)
-                       'coarse_distance': 0.5,  # disrance from cyl (center?) where coarsening starts (m)
-                       'box_size': 0.05,  # mesh size on wall (m)
-                       'jet_positions': [90 + jet_angle, 270 - jet_angle],  # position of jets in deg from jet_angle ref
-                       'jet_width': 10,  # jet width from center of cyl (deg)
-                       'clscale': 0.25,  # ????
-                       'template': '../geometry_2d.template_geo',  # sets rel path of geom template
-                       'remesh': remesh}  # remesh toggle (from args)
 
-
-    profile = Expression('1','0', degree=2)
+    profile = Expression(('1','0'), degree=2)
 
     flow_params = {'mu': 1E-3, # Dynamic viscosity. This in turn defines the Reynolds number: Re = U * D / mu  (***)
                   'rho': 1,  # Density

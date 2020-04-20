@@ -575,7 +575,7 @@ class Env2DCylinder(Environment):
                 plt.draw()
                 plt.pause(0.5)
 
-        if self.solver_step % 100 == 0:  # Output info one step every 100
+        if self.solver_step % 1 == 0:  # Output info one step every 100
             # Display information in command line
             print("%s | Ep N: %4d, step: %4d, Rec Area: %.4f, drag: %.4f, lift: %.4f" % (
             self.simu_name, self.episode_number,

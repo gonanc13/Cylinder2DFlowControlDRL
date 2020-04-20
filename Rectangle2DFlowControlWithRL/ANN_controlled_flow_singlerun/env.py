@@ -52,7 +52,7 @@ def resume_env(plot=False,
                     'template': '../geometry_2d.template_geo',
                     'remesh': remesh}
 
-    profile = Expression('1', '0', degree=2)
+    profile = Expression(('1','0'), degree=2)
 
     flow_params = {'mu': 1E-3,
                   'rho': 1,

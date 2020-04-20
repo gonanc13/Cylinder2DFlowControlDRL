@@ -67,7 +67,7 @@ def resume_env(plot=False, # To plot results (Field, controls, lift, drag, rec a
                     'coarse_distance': 1.0}  # Distance From Cylinder's Right-Most Point Where Coarsening Starts  (***)
 
 
-    profile = Expression('1','0', degree=2)
+    profile = Expression(('1','0'), degree=2)
 
     flow_params = {'mu': 1E-3, # Dynamic viscosity. This in turn defines the Reynolds number: Re = U * D / mu  (***)
                   'rho': 1,  # Density

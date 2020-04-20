@@ -98,7 +98,7 @@ if(os.path.exists("saved_models/checkpoint")):
 if restore_path is not None:
     printi("restore the model")
     agent.restore_model(restore_path)
-else:
+else :
     print('Trained Network not found...')
 
 if(os.path.exists("saved_models/test_strategy.csv")):
