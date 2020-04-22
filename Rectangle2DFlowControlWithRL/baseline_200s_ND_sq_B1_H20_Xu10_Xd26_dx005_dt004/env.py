@@ -41,7 +41,7 @@ def resume_env(plot=False, # To plot results (Field, controls, lift, drag, rec a
     # Spatial and time quantitites seem to be non-dimensionalized by 0.1
 
     simulation_duration = 20.0 # Duration of the simulation in seconds. In non-dimensional time this equates to 20.0 (***)
-    dt=0.005 # Dimensional timestep in seconds. In non-dim this equates to 0.005 (***)
+    dt=0.004 # Dimensional timestep in seconds. In non-dim this equates to 0.005 (***)
 
     root = 'mesh/turek_2d' # Define mesh path root
     if(not os.path.exists('mesh')):
@@ -50,21 +50,21 @@ def resume_env(plot=False, # To plot results (Field, controls, lift, drag, rec a
 
 
     geometry_params = {'output': '.'.join([root, 'geo']), # output path: mesh/turek_2d.geo
-                    'clscale': 0.25, # mesh size scaling ratio
+                    'clscale': 1, # mesh size scaling ratio
                     'template': '../rectangle_2d.template_geo', # sets rel path of geom template
                     'remesh': remesh, # remesh toggle (from resume_env args))
                     'jets_toggle': 1,  # toggle Jets --> 0 : No jets, 1: Yes jets
-                    'jet_width': 0.01,  # Jet Width  (***)
+                    'jet_width': 0.1,  # Jet Width  (***)
                     'height_cylinder': 1,  # Cylinder Height (***)
                     'ar': 1.0,  # Cylinder Aspect Ratio
                     'cylinder_y_shift': 0,  # Cylinder Center Shift from Centerline, Positive UP  (***)
-                    'x_upstream': 5,  # Domain Upstream Length (from left-most rect point)  (***)
-                    'x_downstream': 15,  # Domain Downstream Length (from right-most rect point)  (***)
-                    'height_domain': 10,  # Domain Height  (***)  Souhankar showed that the boundaries are sufficiently far away ifH >= 20B, (little effect on flow near cylinder.
-                    'mesh_size_cylinder': 0.1,  # Mesh Size on Cylinder Walls  (***) 0.004 maybe
-                    'mesh_size_wall': 0.5,  # Mesh Size on Channel Walls  (***)
-                    'mesh_size_coarse': 1,  # Mesh Size Close to Outflow  (***)
-                    'coarse_distance': 5}  # Distance From Cylinder's Right-Most Point Where Coarsening Starts  (***)
+                    'x_upstream': 10,  # Domain Upstream Length (from left-most rect point)  (***)
+                    'x_downstream': 26,  # Domain Downstream Length (from right-most rect point)  (***)
+                    'height_domain': 20,  # Domain Height  (***)  Souhankar showed that the boundaries are sufficiently far away ifH >= 20B, (little effect on flow near cylinder.
+                    'mesh_size_cylinder': 0.005,  # Mesh Size on Cylinder Walls  (***) 0.004 maybe
+                    'mesh_size_wall': 0.025,  # Mesh Size on Channel Walls  (***)
+                    'mesh_size_coarse': 0.05,  # Mesh Size Close to Outflow  (***)
+                    'coarse_distance': 15}  # Distance From Cylinder's Right-Most Point Where Coarsening Starts  (***)
 
 
     profile = Expression(('1','0'), degree=2)
@@ -164,7 +164,7 @@ def resume_env(plot=False, # To plot results (Field, controls, lift, drag, rec a
 
     # We set the value of n-iter (no. iterations to calculate converged initial state) depending on if we remesh
     if(remesh):
-        n_iter = int(175.0 / dt)  # 20 seconds / dt --> Number of iterations
+        n_iter = int(200.0 / dt)  # 20 seconds / dt --> Number of iterations
         if(os.path.exists('mesh')):
             shutil.rmtree('mesh')   # If previous mesh directory exists, we delete it
         os.mkdir('mesh')  # Create new empty mesh directory

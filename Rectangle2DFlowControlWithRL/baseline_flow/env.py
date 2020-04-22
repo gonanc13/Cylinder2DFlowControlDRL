@@ -178,7 +178,7 @@ def resume_env(plot=False, # To plot results (Field, controls, lift, drag, rec a
     simu_name = 'Simu'  # 'root' of the name
 
     if geometry_params["mesh_size_cylinder"] != 0.01:
-        next_param = 'M' + str(geometry_params["cylinder_size"])[2:]
+        next_param = 'M' + str(geometry_params["mesh_size_cylinder"])[2:]
         simu_name = '_'.join([simu_name, next_param])     # e.g: if cyl_size (mesh) = 0.025 --> simu_name += '_M25'
     if optimization_params["max_value_jet_MFR"] != 0.01:
         next_param = 'maxF' + str(optimization_params["max_value_jet_MFR"])[2:]
