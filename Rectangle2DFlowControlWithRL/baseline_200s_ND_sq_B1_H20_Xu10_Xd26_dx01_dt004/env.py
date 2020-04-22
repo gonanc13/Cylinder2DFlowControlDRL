@@ -62,8 +62,8 @@ def resume_env(plot=False, # To plot results (Field, controls, lift, drag, rec a
                     'x_downstream': 26,  # Domain Downstream Length (from right-most rect point)  (***)
                     'height_domain': 20,  # Domain Height  (***)  Souhankar showed that the boundaries are sufficiently far away ifH >= 20B, (little effect on flow near cylinder.
                     'mesh_size_cylinder': 0.01,  # Mesh Size on Cylinder Walls  (***) 0.004 maybe
-                    'mesh_size_wall': 0.05,  # Mesh Size on Channel Walls  (***)
-                    'mesh_size_coarse': 0.1,  # Mesh Size Close to Outflow  (***)
+                    'mesh_size_wall': 0.25,  # Mesh Size on Channel Walls  (***)
+                    'mesh_size_coarse': 0.5,  # Mesh Size Close to Outflow  (***)
                     'coarse_distance': 15}  # Distance From Cylinder's Right-Most Point Where Coarsening Starts  (***)
 
 
