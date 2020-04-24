@@ -33,7 +33,8 @@ def generate_mesh(args, template='rectangle_2d.template_geo', dim=2):
 
     list_geometric_parameters = ['jets_toggle', 'jet_width', 'height_cylinder', 'ar', 'cylinder_y_shift',
                                  'x_upstream', 'x_downstream', 'height_domain',
-                                 'mesh_size_cylinder', 'mesh_size_wall', 'mesh_size_coarse', 'coarse_distance']
+                                 'mesh_size_cylinder', 'mesh_size_medium', 'mesh_size_coarse',
+                                 'coarse_y_distance_top_bot', 'coarse_x_distance_left_from_LE']
 
     constants = " "
 
@@ -84,15 +85,16 @@ if __name__ == '__main__':   # This is only run when this file is executed as a 
                         help='Domain Downstream Length (from right-most rect point)')
     parser.add_argument('-height_domain', nargs='+', default=[0, 60, 120, 180, 240, 300],
                         help='Domain Height')
-    parser.add_argument('-mesh_size_cylinder', default=10, type=float,
+    parser.add_argument('-mesh_size_cylinder', default=0.005, type=float,
                         help='Mesh Size on Cylinder Walls')
-    parser.add_argument('-mesh_size_wall', default=10, type=float,
-                        help='Mesh Size on Channel Walls')
-    parser.add_argument('-mesh_size_coarse', default=10, type=float,
-                        help='Mesh Size Close to Outflow')
-    parser.add_argument('-coarse_distance', default=10, type=float,
-                        help='Distance From Cylinder Right-Most Point Where Coarsening Starts')
-
+    parser.add_argument('-mesh_size_coarse', default=1, type=float,
+                        help='Mesh Size on boundaries outside wake')
+    parser.add_argument('-mesh_size_medium', default=0.2, type=float,
+                        help='Medium mesh size (at boundary where coarsening starts')
+    parser.add_argument('-coarse_y_distance_top_bot', default=4, type=float,
+                        help='y-distance from center where mesh coarsening starts')
+    parser.add_argument('-coarse_x_distance_left_from_LE', default=2, type=float,
+                        help='x-distance from upstream face where mesh coarsening starts')
 
     # Refine geometry
     parser.add_argument('-clscale', default=1, type=float,

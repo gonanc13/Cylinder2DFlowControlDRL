@@ -7,13 +7,13 @@ cylinder_y_shift = {0.0, Name "Cylinder Center Shift from Centerline, Positive U
 x_upstream = {10, Name "Domain Upstream Length (from left-most rect point) (ND)"}
 x_downstream = {26, Name "Domain Downstream Length (from right-most rect point) (ND)"}
 height_domain = {20, Name "Domain Height (ND)"}
-coarse_y_distance_top_bot = {4, Name "y-distance from center where mesh coarsening starts"}
-coarse_x_distance_left_from_LE = {2, Name "x-distance from upstream face where mesh coarsening starts"}
 mesh_size_cylinder = {0.05, Name "Mesh Size on Cylinder Walls"}
-mesh_size_medium = {0.2, Name "Medium mesh size (at boundary where coarsening starts"}
-mesh_size_coarse = {1, Name "Coarse mesh Size Close to Domain boundaries outside wake"}
+mesh_size_wall = {0.5, Name "Mesh Size on Channel Walls"}
+mesh_size_coarse = {0.5, Name "Mesh Size Close to Outflow"}
+coarse_distance = {10, Name "Distance From Cylinder's Right-Most Point Where Coarsening Starts (ND)"}
 jet_width = {0.1, Name "Jet Width (ND)"}
 ];
+
 
 // Seed the cylinder's center's identifier and create the center point
 center = newp;
@@ -98,74 +98,63 @@ EndIf
 
 // Create the channel (Domain exterior boundary)
 // Define useful quantities
-y_top_dom = height_domain/2-cylinder_y_shift;  // Smaller than half the height if positive shift
-y_bot_dom = -height_domain/2-cylinder_y_shift; // Larger in mag than half the height if positive shift
-x_left_dom = -r_length/2-x_upstream;
-x_right_dom = r_length/2+x_downstream;
-
-y_coarse_top = coarse_y_distance_top_bot;
-y_coarse_bot = - coarse_y_distance_top_bot;
-x_coarse_left = - r_length/2 - coarse_x_distance_left_from_LE;
+y_top = height_domain/2-cylinder_y_shift;  // Smaller than half the height if positive shift
+y_bot = -height_domain/2-cylinder_y_shift; // Larger in mag than half the height if positive shift
+x_left = -r_length/2-x_upstream;
+x_right = r_length/2+x_downstream;
+x_coarse = r_length/2+coarse_distance;
 
 // Define points
 p = newp;
-Point(p) = {x_left_dom, y_bot_dom, 0, mesh_size_coarse}; // domain bottom-left corner
-Point(p+1) = {x_right_dom, y_bot_dom, 0, mesh_size_coarse}; // domain bottom-right corner
-Point(p+2) = {x_right_dom, y_top_dom, 0, mesh_size_coarse}; // domain top-right corner
-Point(p+3) = {x_left_dom, y_top_dom, 0, mesh_size_coarse}; // domain top-left corner
-
-Point(p+4) = {x_coarse_left, y_coarse_bot, 0, mesh_size_medium}; // coarsening bottom-left corner
-Point(p+5) = {x_right_dom, y_coarse_bot, 0, mesh_size_medium}; // coarsening bottom-right corner
-Point(p+6) = {x_right_dom, y_coarse_top, 0, mesh_size_medium}; // coarsening top-right corner
-Point(p+7) = {x_coarse_left, y_coarse_top, 0, mesh_size_medium}; // coarsening top-left corner
-
+Point(p) = {x_left, y_bot, 0, mesh_size_wall}; // bottom-left corner
+Point(p+1) = {x_coarse, y_bot, 0, mesh_size_coarse}; // bottom start of coarse zone
+Point(p+2) = {x_right, y_bot, 0, mesh_size_coarse}; // bottom-right corner
+Point(p+5) = {x_left, y_top, 0, mesh_size_wall}; // top-left corner
+Point(p+4) = {x_coarse, y_top, 0, mesh_size_coarse}; // top start of coarse zone
+Point(p+3) = {x_right, y_top, 0, mesh_size_coarse}; // top-right corner
 
 l = newl;
-// Bottom wall (slip-free)
+// Bottom wall (no slip)
 Line(l) = {p, p+1};
-Physical Line(1) = {l};
+Line(l+1) = {p+1, p+2};
+Physical Line(1) = {l, l+1};
 
 // Right wall (outflow)
-Line(l+1) = {p+1, p+5};  // Bottom-right side
-Line(l+2) = {p+5, p+6};  // Middle-right side (coarsening bound right)
-Line(l+3) = {p+6, p+2};  // Top-right side
-Physical Line(2) = {l+1, l+2, l+3};
+Line(l+2) = {p+2, p+3};
+Physical Line(2) = {l+2};
 
-// Top wall (slip free)
-Line(l+4) = {p+2, p+3};
-Physical Line(1) += {l+4};
+// Top wall (no slip)
+Line(l+3) = {p+3, p+4};
+Line(l+4) = {p+4, p+5};
+Physical Line(1) += {l+3, l+4};
 
 // Inlet
-Line(l+5) = {p+3, p};
+Line(l+5) = {p+5, p};
 Physical Line(3) = {l+5};
 
-// Coarsening bound bottom
-Line(l+6) = {p+4, p+5};
-
-// Coarsening bound top
-Line(l+7) = {p+6, p+7};
-
-// Coarsening bound left
-Line(l+8) = {p+7, p+4};
+// Coarse line
+Line(l+6) = {p+1, p+4};
 
 // Define coarse mesh portion of domain
 // Create line loop for coarse area
 coarse = newll;
-Line Loop(coarse) = {(l), (l+1), -(l+6), -(l+8), -(l+7), (l+3), (l+4), (l+5)};
+Line Loop(coarse) = {(l+1), (l+2), (l+3), -(l+6)};
 // Create surface and physical surface for coarse area
 s = news;
 Plane Surface(s) = {coarse};
 Physical Surface(1) = {s};  // Physical surface to be mesh (then we'll add fine portion)
 
-// Create line loop for fine area (containing the cylinder)
-fine_outer = newll;
-Line Loop(fine_outer) = {(l+6), (l+2), (l+7), (l+8)};  // Outer line loop of fine zone
-fine_inner = newll;
-Line Loop(fine_inner) = {cylinder[]}; // Inner line loop (cylinder)
+// Define fine mesh portion of domain
+// Create list of lines that contain the cylinder (== fine mesh zone)
+cframe[] = {l, (l+6), l+4, l+5};
+outer = newll;
+Line Loop(outer) = {cframe[]}; // Outer line loop
+inner = newll;
+Line Loop(inner) = {cylinder[]}; // Inner line loop (cylinder)
 
 // Define final physical surface
 s = news;
-Plane Surface(s) = {fine_outer, fine_inner}; // Should be outer, inner, no??
+Plane Surface(s) = {outer, inner}; // Should be outer, inner, no??
 Physical Surface(1) += {s}; // // Add to surface to be mesh
 
 // First the jet and no slip surfaces of the cylinder are defined. Each jet surface is a physical line and all the no slip

@@ -47,8 +47,6 @@ def resume_env(plot=False, # To plot results (Field, controls, lift, drag, rec a
     if(not os.path.exists('mesh')):
         os.mkdir('mesh')
 
-
-
     geometry_params = {'output': '.'.join([root, 'geo']), # output path: mesh/turek_2d.geo
                     'clscale': 1, # mesh size scaling ratio
                     'template': '../rectangle_2d.template_geo', # sets rel path of geom template
@@ -60,11 +58,12 @@ def resume_env(plot=False, # To plot results (Field, controls, lift, drag, rec a
                     'cylinder_y_shift': 0,  # Cylinder Center Shift from Centerline, Positive UP  (***)
                     'x_upstream': 10,  # Domain Upstream Length (from left-most rect point)  (***)
                     'x_downstream': 26,  # Domain Downstream Length (from right-most rect point)  (***)
-                    'height_domain': 20,  # Domain Height  (***)  Souhankar showed that the boundaries are sufficiently far away ifH >= 20B, (little effect on flow near cylinder.
-                    'mesh_size_cylinder': 0.025,  # Mesh Size on Cylinder Walls  (***) 0.004 maybe
-                    'mesh_size_wall': 0.25,  # Mesh Size on Channel Walls  (***)
-                    'mesh_size_coarse': 0.5,  # Mesh Size Close to Outflow  (***)
-                    'coarse_distance': 15}  # Distance From Cylinder's Right-Most Point Where Coarsening Starts  (***)
+                    'height_domain': 20,  # Domain Height  (***)
+                    'mesh_size_cylinder': 0.01,  # Mesh Size on Cylinder Walls
+                    'mesh_size_medium': 0.15,  # Medium mesh size (at boundary where coarsening starts
+                    'mesh_size_coarse': 1,  # Coarse mesh Size Close to Domain boundaries outside wake
+                    'coarse_y_distance_top_bot': 4,  # y-distance from center where mesh coarsening starts
+                    'coarse_x_distance_left_from_LE': 2.5}  # x-distance from upstream face where mesh coarsening starts
 
 
     profile = Expression(('1','0'), degree=2)
