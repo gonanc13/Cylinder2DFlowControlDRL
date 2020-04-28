@@ -41,7 +41,7 @@ def resume_env(plot=False, # To plot results (Field, controls, lift, drag, rec a
     # Spatial and time quantitites seem to be non-dimensionalized by 0.1
 
     simulation_duration = 20.0 # Duration of the simulation in seconds. In non-dimensional time this equates to 20.0 (***)
-    dt=0.0005 # Dimensional timestep in seconds. In non-dim this equates to 0.005 (***)
+    dt=0.04 # Dimensional timestep in seconds. In non-dim this equates to 0.005 (***)
 
     root = 'mesh/turek_2d' # Define mesh path root
     if(not os.path.exists('mesh')):

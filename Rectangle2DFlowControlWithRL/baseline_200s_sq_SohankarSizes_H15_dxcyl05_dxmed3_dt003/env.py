@@ -41,7 +41,7 @@ def resume_env(plot=False, # To plot results (Field, controls, lift, drag, rec a
     # Spatial and time quantitites seem to be non-dimensionalized by 0.1
 
     simulation_duration = 20.0 # Duration of the simulation in seconds. In non-dimensional time this equates to 20.0 (***)
-    dt=0.05 # Dimensional timestep in seconds. In non-dim this equates to 0.005 (***)
+    dt=0.03 # Dimensional timestep in seconds. In non-dim this equates to 0.005 (***)
 
     root = 'mesh/turek_2d' # Define mesh path root
     if(not os.path.exists('mesh')):
@@ -58,7 +58,7 @@ def resume_env(plot=False, # To plot results (Field, controls, lift, drag, rec a
                     'cylinder_y_shift': 0,  # Cylinder Center Shift from Centerline, Positive UP  (***)
                     'x_upstream': 10,  # Domain Upstream Length (from left-most rect point)  (***)
                     'x_downstream': 26,  # Domain Downstream Length (from right-most rect point)  (***)
-                    'height_domain': 20,  # Domain Height  (***)
+                    'height_domain': 15,  # Domain Height  (***)
                     'mesh_size_cylinder': 0.05,  # Mesh Size on Cylinder Walls
                     'mesh_size_medium': 0.3,  # Medium mesh size (at boundary where coarsening starts
                     'mesh_size_coarse': 1,  # Coarse mesh Size Close to Domain boundaries outside wake
