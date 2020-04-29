@@ -56,8 +56,8 @@ def resume_env(plot=False, # To plot results (Field, controls, lift, drag, rec a
                     'height_cylinder': 1,  # Cylinder Height (***)
                     'ar': 1.0,  # Cylinder Aspect Ratio
                     'cylinder_y_shift': 0,  # Cylinder Center Shift from Centerline, Positive UP  (***)
-                    'x_upstream': 10,  # Domain Upstream Length (from left-most rect point)  (***)
-                    'x_downstream': 20,  # Domain Downstream Length (from right-most rect point)  (***)
+                    'x_upstream': 7.5,  # Domain Upstream Length (from left-most rect point)  (***)
+                    'x_downstream': 26,  # Domain Downstream Length (from right-most rect point)  (***)
                     'height_domain': 25,  # Domain Height  (***)
                     'mesh_size_cylinder': 0.05,  # Mesh Size on Cylinder Walls
                     'mesh_size_medium': 0.3,  # Medium mesh size (at boundary where coarsening starts
