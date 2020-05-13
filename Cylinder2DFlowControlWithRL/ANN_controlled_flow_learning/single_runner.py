@@ -21,7 +21,7 @@ from Env2DCylinder import Env2DCylinder
 
 printi("resume env")
 
-environment = resume_env(plot=500, dump=10, single_run=True)
+environment = resume_env(plot=False, dump=10, single_run=True)
 deterministic=True
 
 printi("define network specs")

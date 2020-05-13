@@ -56,7 +56,7 @@ def resume_env(plot=False, # To plot results (Field, controls, lift, drag, rec a
                     'height_cylinder': 1,  # Cylinder Height (***)
                     'ar': 1.0,  # Cylinder Aspect Ratio
                     'cylinder_y_shift': 0,  # Cylinder Center Shift from Centerline, Positive UP  (***)
-                    'x_upstream': 3,  # Domain Upstream Length (from left-most rect point)  (***)
+                    'x_upstream': 20,  # Domain Upstream Length (from left-most rect point)  (***)
                     'x_downstream': 26,  # Domain Downstream Length (from right-most rect point)  (***)
                     'height_domain': 25,  # Domain Height  (***)
                     'mesh_size_cylinder': 0.05,  # Mesh Size on Cylinder Walls
@@ -74,8 +74,9 @@ def resume_env(plot=False, # To plot results (Field, controls, lift, drag, rec a
 
     solver_params = {'dt': dt}
 
-    # Define probe positions  (***)
-    list_position_probes = []  # Initialise list of (x,y) np arrays with positions
+    ## Define probes positions
+
+    list_position_probes = []  # Initialise list of (x,y) np arrays with positions coordinates
 
     # Obtain relevant quantities
     height_cylinder = geometry_params['height_cylinder']
@@ -129,7 +130,7 @@ def resume_env(plot=False, # To plot results (Field, controls, lift, drag, rec a
                      }
 
     optimization_params = {"num_steps_in_pressure_history": 1, # Number of steps that constitute an environment state (state shape = this * len(locations))
-                        "min_value_jet_MFR": -1e-2,  # Set min and max Q* for weak actuation
+                        "min_value_jet_MFR": -1e-2,  # Set min and max Q* for weak actuation... paper says 0.06???
                         "max_value_jet_MFR": 1e-2,
                         "smooth_control": (nb_actuations/dt)*(0.1*0.0005/80),  # parameter alpha to smooth out control. Gives 0.1 with usual params
                         "zero_net_Qs": True,  # True if Q1 + Q2 = 0
@@ -139,30 +140,30 @@ def resume_env(plot=False, # To plot results (Field, controls, lift, drag, rec a
     inspection_params = {"plot": plot,
                         "step": step,
                         "dump": dump,
-                        "range_pressure_plot": [-2.0, 1],  # ylim for pressure plot
+                        "range_pressure_plot": [-2.0, 1], # ylim for pressure plot
                         "range_drag_plot": [-0.175, -0.13],  # ylim for drag plot
                         "range_lift_plot": [-0.2, +0.2],  # ylim for lift plot
-                        "line_drag": -0.1595,  # Mean drag without control
+                        "line_drag": -0.1595,  # Mean drag without control (TODO)
                         "line_lift": 0,
                         "show_all_at_reset": False,
                         "single_run": single_run
                         }
 
-    reward_function = 'drag_plain_lift'
+    reward_function = 'drag_plain_lift'  # Choose reward function
 
     verbose = 0  # For detailed output (see Env2DRectangle)
 
-    number_steps_execution = int((simulation_duration/dt)/nb_actuations)  # Number of numerical timesteps over which NN action is kept constant, control being interpolated
+    number_steps_execution = int((simulation_duration/dt)/nb_actuations)  # Number of steps over which NN control output is kept constant
 
     # ---------------------------------------------------------------------------------
     # do the initialization
 
-    # If remesh = True, we sim with no control until a well-developed unsteady wake is obtained. That state is saved and
+    # If we remesh, we sim with no control until a well-developed unsteady wake is obtained. That state is saved and
     # used as a start for each subsequent learning episode.
 
-    # If so, set the value of n-iter (no. iterations to calculate converged initial state)
+    # We set the value of n-iter (no. iterations to calculate converged initial state) depending on if we remesh
     if(remesh):
-        n_iter = int(200.0 / dt)
+        n_iter = int(200.0 / dt)  # 20 seconds / dt --> Number of iterations
         if(os.path.exists('mesh')):
             shutil.rmtree('mesh')   # If previous mesh directory exists, we delete it
         os.mkdir('mesh')  # Create new empty mesh directory
@@ -172,10 +173,10 @@ def resume_env(plot=False, # To plot results (Field, controls, lift, drag, rec a
 
 
 
-    # Processing the name of the simulation (to be used in outputs)
+    #Processing the name of the simulation (to be used in outputs)
     simu_name = 'Simu'  # 'root' of the name
 
-    if geometry_params["mesh_size_cylinder"] != 0.05:
+    if geometry_params["mesh_size_cylinder"] != 0.01:
         next_param = 'M' + str(geometry_params["mesh_size_cylinder"])[2:]
         simu_name = '_'.join([simu_name, next_param])     # e.g: if cyl_size (mesh) = 0.025 --> simu_name += '_M25'
     if optimization_params["max_value_jet_MFR"] != 0.01:
@@ -209,7 +210,7 @@ def resume_env(plot=False, # To plot results (Field, controls, lift, drag, rec a
                                     output_params=output_params,
                                     optimization_params=optimization_params,
                                     inspection_params=inspection_params,
-                                    n_iter_make_ready=n_iter,
+                                    n_iter_make_ready=n_iter,  # We recalculate if necessary
                                     verbose=verbose,
                                     reward_function=reward_function,
                                     number_steps_execution=number_steps_execution,
